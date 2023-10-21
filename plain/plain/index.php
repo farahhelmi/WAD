@@ -3,8 +3,7 @@
 // Get the requested route from the URL
 $route = isset($_GET['route']) && !str_ends_with($_GET['route'], 'index.php') ? $_GET['route'] : 'index';
 $routeParts = explode('/', $route);
-echo $_GET['route'], '<br/>';
-echo $route.'<br/>';
+
 
 // Check whether it is try to access assets folder or not
 if (strpos($routeParts[0], 'assets') === 0) {

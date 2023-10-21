@@ -21,6 +21,10 @@ class User {
 
     public function doRegister() {
         $this->userDAO->insert($_POST['username'], $_POST['email'], $_POST['password']);
+        if (isset($_FILES['image']) && $_FILES['image']['error'] === UPLOAD_ERR_OK){
+            $imageData = file_get_contents($_FILES['image']['tmp_name']);
+            $this->userDAO->move_uploaded_file($imageData);
+        }
         header('location:/user/showAll');
     }
 

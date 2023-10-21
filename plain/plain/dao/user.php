@@ -41,14 +41,29 @@ class UserDAO {
         
         $sql = "SELECT * FROM users where username = '$username' and password='$password'";
         $result = $this->conn->query($sql);
+        $stmt->bind_param("ss", $username, $password);
+        $stmt->execute();
+    
+        $result = $stmt->get_result();
         
         if ($result->num_rows > 0) {
-            while($row = $result->fetch_assoc()) {
-                $user = new User($row['id'], $row['username']);
-                break;
-            }
+            $row = $result->fetch_assoc();
+            $user = new User($row['id'], $row['username'], $row['image']);
+            
         }
 
+        $stmt->close();
+
         return $user;
+    }
+    public function move_uploaded_file($image){
+        $sql = "update users set image = ? where id = (select max(id) from users)";
+        $stmt = $this->conn->prepare($sql);
+        $stmt->bind_param("s", $image);
+        
+        $stmt->execute();
+        
+        $stmt->close();
+        
     }
 }
